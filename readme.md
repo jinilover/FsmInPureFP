@@ -38,9 +38,12 @@ data Mood = Mood { moodTime :: UTCTime, moodValue :: Int}
 data Fatigue = Fatigue { fatigueTime :: UTCTime, fatigueValue :: Int }
 ```
 
-For the common data types possesed by different `Stage` and the functions using them, please refer to ???
+For the common data types possesed by different `Stage` and the functions using them, please refer to 
+https://github.com/jinilover/FsmInPureFP/blob/master/src/Fsm/Commons.hs
+https://github.com/jinilover/FsmInPureFP/blob/master/src/Fsm/UpdateStates.hs
 
-For the types modelling the `Stage` and the functions using them, please refer to ???
+For the types modelling the `Stage` and the functions using them, please refer to 
+https://github.com/jinilover/FsmInPureFP/blob/master/src/Fsm/Stages.hs
 
 #Rule of the game
 The basic idea is similar to the commercial game - goes through several stages in the lifecycle.  User needs to enter appropriate input to keep it alive and growing.  If the user doesn't enter input for certain period of time `inputTimeout` or enter an invalid input, it will proceed to another state accordingly.  When it's sleeping, it doesn't want to be disturbed and user is not allowed to enter input.  To make the game simple, there are only 4 stages - `Egg`, `Chicken`, `Adult` and `Elder`.  Since each stage has different behaviour and properties, the available inputs are not the same in all stages.  
@@ -80,11 +83,11 @@ Additional behaviour:
 * Limited # of medication.
 
 #How to run it?
-???
+To build it, run `stack build` and run `stack exec fsm-purefp-exe` to execute it.
 
 #How to run the unit-test?
 Under `FsmInPureFP` folder, run command
 `stack build FsmInPureFP:FsmInPureFP-tests`
 
 #Parameters to be tuned
-???
+https://github.com/jinilover/FsmInPureFP/blob/master/src/resources/appl.cfg
