@@ -39,6 +39,10 @@ commonCheckGrow pet1 t1 pet2 t2 =
       `shouldSatisfy` all (== (t1, t2))
   where shouldEqual f = (length . nub) (f <$> [pet1, pet2]) `shouldBe` 1
 
+-- a helper used by multiple tests in chickUpdateSpec
+-- according Stages.hs, chickenAutoUpdates, i.e. [StageUpdate] functions, are applied on a pet when its stage,
+-- after applying [StageUpdate] on the stage, only checking the final stage is sufficient,
+-- this helper check the interim after each StageUpdate to make sure each StageUpdate is correct.
 runAndCheck :: [CheckUpdate] -> Stage -> StageConstants -> UTCTime -> IO Stage
 runAndCheck checkings orig consts ct =
   do
@@ -46,8 +50,8 @@ runAndCheck checkings orig consts ct =
     let result2 = autoUpdate orig ct consts
     result1 `shouldBe` result2
     return result1
-  where check stageIo (update, checking) = do
-          old <- stageIo
+  where check acc (update, checking) = do
+          old <- acc
           let new = update old ct consts
           checking old new consts ct
           return new
@@ -302,6 +306,7 @@ chickUpdateSpec allConsts =
     it "1 executes chickenAutoUpdates, detects change by constipateEffect after another waiting" $ do
       c1 <- createChicken <$> getCurrentTime
       t2 <- timeAfter _digestSecs
+      -- the order of the checking item is important, the note in runAndCheck gives explanation
       let checkings = [checkDigest1, checkConstipate1, checkDecreaseMood1, checkDepress1, checkRaiseFatigue1, checkFatigue1]
       c2 <- runAndCheck checkings c1 petConsts t2
       t3 <- timeAfter _digestSecs
