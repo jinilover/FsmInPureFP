@@ -1,4 +1,5 @@
 {-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE RecordWildCards #-}
 module Fsm.SimpleFsm where
 
 import Fsm.Stages
@@ -24,15 +25,15 @@ process :: Stage -> UserPrompt -> UserInput -> AllConstants -> IO String
 -- process egg@Egg{} _ (_, input) _
 --   | currTemp egg == 100 = return $ "Testing!! " <> "Input is " <> show input
 -- cooked the egg
-process egg@Egg{} _ (_, Just IncreaseTemp) allConsts
-  | currTemp egg == (fatalMaxTemp . eggConsts) allConsts =
+process Egg{..} _ (_, Just IncreaseTemp) allConsts
+  | currTemp == (fatalMaxTemp . eggConsts) allConsts =
     return "The egg has reached the max temperature, you've cooked it"
 -- frozen the egg
-process egg@Egg{} _ (_, Just DecreaseTemp) allConsts
-  | currTemp egg == (fatalMinTemp . eggConsts) allConsts =
+process Egg{..} _ (_, Just DecreaseTemp) allConsts
+  | currTemp == (fatalMinTemp . eggConsts) allConsts =
     return "The egg has reached the min temperature, you've frozen it"
 -- egg suffered the fatal temps for long time
-process egg@(Egg chgdTime temp _ Sick) _ (ct, _) allConsts
+process (Egg chgdTime temp _ Sick) _ (ct, _) allConsts
   | secsSpent chgdTime ct >= _fatalTempSecs && isFatalTemp temp allConsts =
     return $
       "The egg is in poor health and suffered the " <> extreme <> " temperature for at least "

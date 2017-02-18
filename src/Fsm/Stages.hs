@@ -1,4 +1,5 @@
 {-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module Fsm.Stages where
 
@@ -44,7 +45,7 @@ data Stage = Egg { stateChgdTime :: UTCTime,
                      medAllows :: Int} deriving (Eq, Show)
 
 instance Timeable Stage where
-  age egg@Egg{} = const 0
+  age Egg{} = const 0
   age pet = (secsSpent . bornTime) pet
 
 getConstants :: Stage -> AllConstants -> StageConstants
@@ -94,7 +95,7 @@ sleepTemplate f pet ct petConsts =
 -- according to the given stage and its states
 -- such as stutus, fullness, health
 inputsByState :: Stage -> [Input]
-inputsByState egg@Egg{} = eggInputs
+inputsByState Egg{} = eggInputs
 inputsByState pet =
   let (inps, funcs) = case pet of Chicken{} -> (chickenInputs, [])
                                   Adult{} -> (adultInputs, [])
@@ -140,16 +141,16 @@ digestEffect pet ct petConsts =
 
 -- update the stage after singing
 sing :: StageUpdate
-sing adult@Adult{} ct petConsts =
+sing adult@Adult{..} ct petConsts =
   let limit = (Limit . depressIndex) petConsts in
-  adult { mood = _increaseMood (mood adult) limit ct }
+  adult { mood = _increaseMood mood limit ct }
 sing otherStage _ _ = otherStage
 
 -- update the stage after medicate
 medicate :: StageUpdate
 medicate egg@Egg{} _ _ = egg
 medicate elder@(Elder _ 0 _ _ _ _ _ _ _ _ _) _ _ = elder
-medicate elder@Elder{} _ _ = elder { medAllows = medAllows elder - 1, health = (_medicate . health) elder }
+medicate elder@Elder{..} _ _ = elder { medAllows = medAllows - 1, health = _medicate health }
 medicate pet _ _ = pet { health = (_medicate . health) pet }
 
 -- update the stage after feed
