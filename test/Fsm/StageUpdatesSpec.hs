@@ -1,4 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
 module Fsm.StageUpdatesSpec where
 
 import Control.Monad (void)
@@ -445,7 +444,7 @@ chickUpdateSpec allConsts =
       -- digest happens, poop applied, poo is 0
       t2 <- timeAfter _digestSecs
       checkPoop12 c1 $ withPoop c1 t2 petConsts
-  where !petConsts = chickenConsts allConsts
+  where petConsts = chickenConsts allConsts
         [_duration, _maxAwakeSecs, _pooLimit, _, _pooFromSoSo, _digestSecs, _depressIndex, _fatigueLimit] =
           intConsts petConsts
         createChicken ct = (basePet ct allConsts Chicken) { pooAmt = PooAmount ct $ _pooLimit - 1,
@@ -468,12 +467,12 @@ adultUpdateSpec allConsts =
           adultForTest ct = (basePet ct allConsts Adult) { pooAmt = PooAmount ct $ _pooLimit - 1,
                                                            health = Healthy}
           withGrow = compose autoUpdate grow
-      !adult <- adultForTest <$> getCurrentTime
+      adult <- adultForTest <$> getCurrentTime
       t2 <- timeAfter _digestSecs
       t3 <- timeAfter $ _duration - _digestSecs
       let [pet1, pet2] = (\t -> withGrow adult t _adultConsts) <$> [t2, t3]
       checkAdultGrow pet1 t2 pet2 t3 _adultConsts
-  where !_adultConsts = adultConsts allConsts
+  where _adultConsts = adultConsts allConsts
 
 -- Test the StageUpdate function specific to Stage Elder
 elderUpdateSpec :: AllConstants -> Spec
@@ -483,13 +482,13 @@ elderUpdateSpec allConsts =
       let elderForTest ct = (basePet ct allConsts Elder ct $ medAllowsForElder _adultConsts) {
                               fullness = Full ct
                             }
-      !elder <- elderForTest <$> getCurrentTime
+      elder <- elderForTest <$> getCurrentTime
       t2 <- timeAfter _digestSecs
       t3 <- timeAfter $ _weakerInSecs - _digestSecs
       -- in test1, health upgraded to Healthy due to digest from full,
       -- in test2, wait to reach weakerInSecs, this time healthy downgraded to Fair
       (\t -> health $ autoUpdate elder t _elderConsts) <$> [t2, t3] `shouldBe` [Healthy, Fair]
-  where [_adultConsts, !_elderConsts] = [adultConsts, elderConsts] <*> [allConsts]
+  where [_adultConsts, _elderConsts] = [adultConsts, elderConsts] <*> [allConsts]
         [_digestSecs, _weakerInSecs] = [digestSecs, weakerInSecs] <*> [_elderConsts]
 
 intConsts :: StageConstants -> [Int]

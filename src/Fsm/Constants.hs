@@ -1,4 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Fsm.Constants where
@@ -85,7 +84,7 @@ data AllConstants = AllConstants {
                           elderConsts :: StageConstants
                         }
 
-!constsRoot = "Fsm.Constants."
+constsRoot = "Fsm.Constants."
 
 loadConfig :: (Config -> IO a) -> String -> IO a
 loadConfig f fileName = load [Required fileName] >>= f
@@ -138,19 +137,19 @@ loadCommonPetConsts stageName createPet cfg =
 
 loadChickConsts :: CommonPetConsts (Int -> StageConstants) -> Config -> IO StageConstants
 loadChickConsts createPet cfg =
-  let !stageName = "ChickenConstants" in
+  let stageName = "ChickenConstants" in
   loadCommonPetConsts stageName createPet cfg <*> loadValue ".duration" stageName cfg
 
 loadAdultConsts :: CommonPetConsts (Int -> Int -> StageConstants) -> Config -> IO StageConstants
 loadAdultConsts createPet cfg =
-  let !stageName = "AdultConstants"
+  let stageName = "AdultConstants"
       valueOf constName = loadValue constName stageName cfg in
   loadCommonPetConsts stageName createPet cfg <*> valueOf ".duration"
                                               <*> valueOf ".medAllowsForElder"
 
 loadElderConsts :: CommonPetConsts (Int -> StageConstants) -> Config -> IO StageConstants
 loadElderConsts createPet cfg =
-  let !stageName = "ElderConstants" in
+  let stageName = "ElderConstants" in
       -- valueOf constName = loadValue constName stageName cfg in
   loadCommonPetConsts stageName createPet cfg <*> loadValue ".weakerInSecs" stageName cfg
 

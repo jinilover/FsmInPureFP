@@ -1,4 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE RecordWildCards #-}
 
 module Fsm.Stages where
@@ -68,12 +67,12 @@ weakenEffect getFactor getTimeout pet ct petConsts =
 digest :: Stage -> StageConstants -> Weight -> UTCTime -> Stage
 digest egg@Egg{} _ _ _ = egg -- won't happen, just for completeness
 digest pet consts wtGain ct =
-  let !_fullness = fullness pet
+  let _fullness = fullness pet
       updateFuncs pFun wtFun lFun =
           let [deltaPooFull, deltaPooSoSo, limit] = [pooFromFull, pooFromSoSo, pooLimit] <*> [consts]
-              !wtLoss = (Weight . weightLoss) consts
+              wtLoss = (Weight . weightLoss) consts
               deltaLenFull = (Length . lengthFromFull) consts
-              !pLimit = Limit limit in
+              pLimit = Limit limit in
           case _fullness of Full{} -> (pFun deltaPooFull pLimit, wtFun wtGain, lFun deltaLenFull)
                             SoSo{} -> (pFun deltaPooSoSo pLimit, (`wtFun` wtLoss), lFun 0)
                             Hungry{} -> (pFun 0 pLimit, (`wtFun` wtLoss), lFun 0)
@@ -226,11 +225,11 @@ fatigueEffect pet ct petConsts =
   newPet { fatigue = newFatigue }
 
 -- madatory StageUpate funcs to be applied to the pet when its current Stage is Chicken
-!chickenAutoUpdates = [digestEffect, constipateEffect, decreaseMood, depressEffect, raiseFatigue, fatigueEffect]
+chickenAutoUpdates = [digestEffect, constipateEffect, decreaseMood, depressEffect, raiseFatigue, fatigueEffect]
 -- madatory StageUpate funcs to be applied to the pet when its current Stage is Adult
-!adultAutoUpdates = chickenAutoUpdates
+adultAutoUpdates = chickenAutoUpdates
 -- madatory StageUpate funcs to be applied to the pet when its current Stage is Elder
-!elderAutoUpdates = chickenAutoUpdates ++ [weakerWithTime]
+elderAutoUpdates = chickenAutoUpdates ++ [weakerWithTime]
 
 -- present the stage as output msg
 present :: Stage -> AllConstants -> UTCTime -> String
@@ -245,7 +244,7 @@ present pet allConsts ct =
               _ -> listToString $ labels ++ mandatoryMsgs
     where labels = ["Latest status", "============="]
           mandatoryMsgs =
-            let !consts = getConstants pet allConsts
+            let consts = getConstants pet allConsts
                 [_depressIndex, _happyIndex, _depressSecs, _maxAwakeSecs, _fatigueLimit, _fatigueSecs, _digestSecs, _pooLimit, _pooLimitSecs] =
                   [depressIndex, happyIndex, depressSecs, maxAwakeSecs, fatigueLimit, fatigueSecs, digestSecs, pooLimit, pooLimitSecs] <*> [consts] in
             [const . presentLength . petLength,

@@ -1,5 +1,4 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 
 module Fsm.Commons where
@@ -69,7 +68,7 @@ presentStatus maxAwakeSecs status@Awake{} ct
   | otherwise = mandatoryMsg <> "now"
   where mandatoryMsg = "Awake for " <> show secsAwaken <> " secs since " <>
                         (format . statusTime) status <> ", it needs a rest "
-        !secsAwaken = age status ct
+        secsAwaken = age status ct
 
 presentFatigue :: Limit -> Int -> Fatigue -> UTCTime -> String
 presentFatigue (Limit limit) timeout f@(Fatigue _ v) ct
@@ -207,14 +206,14 @@ inputsByHealth :: Health -> [Input] -> [Input]
 inputsByHealth h xs = decisionByHealth h [x |x <- xs, x /= Play] [x |x <- xs, x /= Medication]
 
 -- inputs allowed by the user when the stage is an egg
-!eggInputs = [IncreaseTemp, DecreaseTemp]
+eggInputs = [IncreaseTemp, DecreaseTemp]
 -- all possible inputs by the user when the stage is a chicken
-!chickenInputs = [Feed, Play, Medication, Bed]
+chickenInputs = [Feed, Play, Medication, Bed]
 -- all possible inputs by the user when the stage is an adult
-!adultInputs = Sing : chickenInputs
+adultInputs = Sing : chickenInputs
 -- all possible inputs by the user when the stage is an elder
-!elderInputs = chickenInputs
-!noDisturbInputs = []
+elderInputs = chickenInputs
+noDisturbInputs = []
 
 -- present all changed state of the current stage as output msg to the user
 stateChgdMsg :: String ->

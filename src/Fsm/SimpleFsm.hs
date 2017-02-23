@@ -1,4 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE RecordWildCards #-}
 module Fsm.SimpleFsm where
 
@@ -38,12 +37,12 @@ process (Egg chgdTime temp _ Sick) _ (ct, _) allConsts
     return $
       "The egg is in poor health and suffered the " <> extreme <> " temperature for at least "
       <> show _fatalTempSecs <> " secs, failed to hatch"
-    where ![_fatalTempSecs, _fatalMaxTemp] = [fatalTempSecs, fatalMaxTemp] <*> [eggConsts allConsts]
+    where [_fatalTempSecs, _fatalMaxTemp] = [fatalTempSecs, fatalMaxTemp] <*> [eggConsts allConsts]
           extreme = if temp == _fatalMaxTemp then "max" else "min"
 -- hatch
 process egg@(Egg chgdTime temp energyToHatch h) prompt (ct, _) allConsts
   | energySpent chgdTime ct temp >= energyToHatch =
-      let !newHealth = updateEggHealth chgdTime ct temp allConsts h
+      let newHealth = updateEggHealth chgdTime ct temp allConsts h
           chicken = Chicken {
                       bornTime = ct,
                       petLength = (Length . lengthByHealth allConsts) newHealth,
@@ -97,7 +96,7 @@ transitMsg (Egg time1 temp1 _ h1) (Egg time2 temp2 energyToHatch2 h2) ct allCons
     if temp2 == fatalMaxTemp _eggConsts then warning "max" "increase" else "",
     show (secsRqd - secsSpent time2 ct) <> " more secs to hatch for temperature " <> show temp2 <> " degrees"
   ]
-  where !_eggConsts = eggConsts allConsts
+  where _eggConsts = eggConsts allConsts
         warning issue fatalAction =
           "Temperature has reached fatal " <> issue <> " " <> show temp2 <> " degrees, " <> "further " <>
           fatalAction <> " or leave it for " <> show (fatalTempSecs _eggConsts) <> " secs will kill the egg!"
@@ -106,7 +105,7 @@ transitMsg (Egg time1 temp1 _ h1) (Egg time2 temp2 energyToHatch2 h2) ct allCons
 transitMsg Egg{} chicken ct allConsts =
   "Hatched to a chicken!\n" <> present chicken allConsts ct
 transitMsg old new ct allConsts =
-  let !toTuple = (head &&& last) . (<$> [old, new])
+  let toTuple = (head &&& last) . (<$> [old, new])
       lengths = toTuple petLength
       weights = toTuple weight
       statuses = toTuple status
@@ -144,7 +143,7 @@ handleSleeping stage prompt ct allConsts
       nextPetState stage (newState [] [] []) msg prompt ct allConsts
   | otherwise = nextPetState stage (newState [wakeup] [poop] []) "Woke up" prompt ct allConsts
     where _sleepSecs = (sleepingSecs . getConstants stage) allConsts
-          !_status = status stage
+          _status = status stage
           newState = updateForHandler stage ct allConsts
 
 handleBed :: Handler
@@ -155,7 +154,7 @@ handleBed stage prompt ct allConsts
       nextPetState stage (newState [] [poop] []) msg prompt ct allConsts
   | otherwise = nextPetState stage (newState [] [poop] [sleep]) "Went sleeping" prompt ct allConsts
     where _awakeSecs = (maxAwakeSecs . getConstants stage) allConsts
-          !_status = status stage
+          _status = status stage
           newState = updateForHandler stage ct allConsts
 
 handleNoInput :: Handler
@@ -210,8 +209,8 @@ gameOver pet allConsts ct = return $
               statusMsg,
               timeableMsg "fatigue index is " (fatigueValue . fatigue) fatigue]
           statusMsg =
-            let !_status = status pet
-                !sTime = statusTime _status
+            let _status = status pet
+                sTime = statusTime _status
                 trail = " for " <> show (secsSpent sTime ct) <> " secs since " <> show (format sTime) in
             case _status of Awake{} -> "Awake" <> trail
                             _ -> "Slept" <> trail
