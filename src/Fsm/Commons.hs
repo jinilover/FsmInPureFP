@@ -114,7 +114,7 @@ class Digestive a where
 
 data Fullness = Full { fullnessTime :: UTCTime } |
                 SoSo { fullnessTime :: UTCTime } |
-                Hungry { fullnessTime :: UTCTime } deriving (Data,Typeable, Eq, Show)
+                Hungry { fullnessTime :: UTCTime } deriving (Data, Eq, Show)
 
 instance Timeable Fullness where
   age = secsSpent . fullnessTime
