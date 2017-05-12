@@ -4,10 +4,13 @@ import Control.Monad (void)
 import Data.List
 import Data.Time
 import Data.Semigroup
+import Fsm.Stages.Types
 import Fsm.Stages
-import Fsm.Constants
+import Fsm.Constants.Types
+import Fsm.ConstantLoaders
 import Fsm.Utils
 import Fsm.Commons
+import Fsm.Commons.Types
 import Fsm.TestUtils
 import Test.Hspec
 

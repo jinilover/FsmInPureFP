@@ -1,22 +1,12 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE DeriveDataTypeable #-}
-
 module Fsm.Commons where
 
--- defines types and functions shared by different stages
+-- defines functions shared by different stages
 
 import Data.Time
-import Data.Data
 import Data.Semigroup
 import Fsm.Utils
-import Fsm.Constants
-
-newtype Limit = Limit Int deriving Num
-newtype Timeout = Timeout Int
-newtype Length = Length Double deriving (Num, Eq, Ord, Show)
-newtype Weight = Weight Double deriving (Num, Eq, Ord, Show)
-newtype PooFromFull = PooFromFull Int deriving Num
-newtype PooFromSoSo = PooFromSoSo Int deriving Num
+import Fsm.Constants.Types
+import Fsm.Commons.Types
 
 upgradeHealth :: Health -> Health
 upgradeHealth Sick = Sick
@@ -86,16 +76,6 @@ presentHealth Healthy = "Healthy!  Keep going!"
 presentHealth Hardy = "Hardy!  No one can fight with you"
 presentHealth _ = "It shouldn't happen!  Bug in your program"
 
-
-
-data Health = Dead | Sick | Weak | Fair | Healthy | Hardy deriving (Enum, Show, Eq)
-
-data Input = IncreaseTemp | DecreaseTemp | Feed | Play | Medication | Bed | Sing deriving (Eq, Show, Ord)
-
-type UserInput = (UTCTime, Maybe Input)
-
-type UserPrompt = [Input] -> String -> IO UserInput
-
 class Timeable a where
   age :: a -> UTCTime -> Int
 
@@ -111,10 +91,6 @@ class Digestive a where
   weightAfter :: a -> Weight -> Weight -> Weight
   lengthAfter :: a -> Length -> Length -> Length
   healthAfter :: a -> Health -> Health
-
-data Fullness = Full { fullnessTime :: UTCTime } |
-                SoSo { fullnessTime :: UTCTime } |
-                Hungry { fullnessTime :: UTCTime } deriving (Data, Eq, Show)
 
 instance Timeable Fullness where
   age = secsSpent . fullnessTime
@@ -136,8 +112,6 @@ instance Digestive Fullness where
   healthAfter SoSo{} = id
   healthAfter _ = downgrade
 
-data PooAmount = PooAmount { pooTime :: UTCTime, poo :: Int } deriving (Eq, Show)
-
 instance Timeable PooAmount where
   age = secsSpent . pooTime
 
@@ -148,8 +122,6 @@ instance WeakFactor PooAmount where
 instance Countdown PooAmount where
   timeRemains pooAmt ct secs = secs - age pooAmt ct
 
-data Mood = Mood { moodTime :: UTCTime, moodValue :: Int} deriving (Eq, Show)
-
 instance Timeable Mood where
   age = secsSpent . moodTime
 
@@ -157,16 +129,12 @@ instance WeakFactor Mood where
   renew m ct = m { moodTime = ct }
   reachLimit m consts = moodValue m <= depressIndex consts
 
-data Fatigue = Fatigue { fatigueTime :: UTCTime, fatigueValue :: Int } deriving (Eq, Show)
-
 instance Timeable Fatigue where
   age = secsSpent . fatigueTime
 
 instance WeakFactor Fatigue where
   renew f ct = f { fatigueTime = ct}
   reachLimit f consts = fatigueValue f >= fatigueLimit consts
-
-data Status = Sleeping { statusTime :: UTCTime } | Awake { statusTime :: UTCTime } deriving (Eq, Show)
 
 instance Timeable Status where
   age = secsSpent . statusTime

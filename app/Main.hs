@@ -7,8 +7,10 @@ import Data.Foldable (toList)
 import Data.Sequence (fromList)
 import Text.Read
 import Fsm.SimpleFsm
-import Fsm.Constants
-import Fsm.Stages
+import Fsm.ConstantLoaders
+import Fsm.Constants.Types
+import Fsm.Stages.Types
+import Fsm.Commons.Types
 import Fsm.Commons
 import Fsm.Utils
 

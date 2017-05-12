@@ -17,11 +17,14 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Fsm.Commons,
+                       Fsm.Commons.Types,
                        Fsm.Utils,
-                       Fsm.Stages,
                        Fsm.Stages.Egg,
+                       Fsm.Stages,
+                       Fsm.Stages.Types,
                        Fsm.SimpleFsm,
-                       Fsm.Constants,
+                       Fsm.ConstantLoaders,
+                       Fsm.Constants.Types,
                        Fsm.UpdateStates
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5,

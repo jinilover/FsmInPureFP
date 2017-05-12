@@ -2,8 +2,10 @@ module Fsm.TestUtils where
 
 import Data.Time
 import Fsm.Commons
-import Fsm.Constants
-import Fsm.Stages
+import Fsm.Commons.Types
+import Fsm.ConstantLoaders
+import Fsm.Constants.Types
+import Fsm.Stages.Types
 import Test.Hspec
 
 type CheckUpdate = Stage -> Stage -> StageConstants -> UTCTime -> Expectation

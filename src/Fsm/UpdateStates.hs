@@ -1,6 +1,7 @@
 module Fsm.UpdateStates where
 
 import Data.Time
+import Fsm.Commons.Types
 import Fsm.Commons
 import Fsm.Utils
 

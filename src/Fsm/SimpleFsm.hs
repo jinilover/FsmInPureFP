@@ -1,10 +1,12 @@
 {-# LANGUAGE RecordWildCards #-}
 module Fsm.SimpleFsm where
 
-import Fsm.Stages
+import Fsm.Stages.Types
 import Fsm.Stages.Egg
-import Fsm.Constants
-import Fsm.Commons
+import Fsm.Stages
+import Fsm.Constants.Types
+import Fsm.Commons.Types
+import Fsm.Commons 
 import Fsm.Utils
 import Data.Data
 import Data.Time

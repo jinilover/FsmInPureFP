@@ -3,9 +3,12 @@ module Fsm.InputSpec where
 import Data.Time
 import Data.Set (fromList, empty)
 import Test.Hspec
-import Fsm.Constants
+import Fsm.ConstantLoaders
+import Fsm.Constants.Types
 import Fsm.Stages
+import Fsm.Stages.Types
 import Fsm.Commons
+import Fsm.Commons.Types
 import Fsm.TestUtils
 
 -- Test the [Input] generated according to the Stage and its states

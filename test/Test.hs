@@ -4,7 +4,7 @@ module Main where
 
 import Data.Time
 import Test.Hspec
-import Fsm.Constants
+import Fsm.ConstantLoaders
 import Fsm.SimpleFsmSpec as SimpleFsmSpec
 import Fsm.InputSpec as InputSpec
 import Fsm.StageUpdatesSpec as StageUpdatesSpec

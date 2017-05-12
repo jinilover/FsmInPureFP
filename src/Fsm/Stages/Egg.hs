@@ -2,7 +2,8 @@ module Fsm.Stages.Egg where
 
 import Fsm.Utils
 import Fsm.Commons
-import Fsm.Constants
+import Fsm.Commons.Types
+import Fsm.Constants.Types
 import Data.Time
 
 energySpent :: UTCTime -> UTCTime -> Int -> Int

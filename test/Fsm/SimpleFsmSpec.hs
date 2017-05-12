@@ -4,11 +4,11 @@ import Data.Time
 import Data.Semigroup
 import Test.Hspec
 import Fsm.TestUtils
-import Fsm.Constants
+import Fsm.Constants.Types
 import Fsm.SimpleFsm
-import Fsm.Commons
+import Fsm.Commons.Types
 import Fsm.Utils
-import Fsm.Stages
+import Fsm.Stages.Types
 
 -- Test the transit functions
 killByInputSpec :: UTCTime -> AllConstants -> Spec

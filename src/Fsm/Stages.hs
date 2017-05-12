@@ -2,46 +2,16 @@
 
 module Fsm.Stages where
 
-import Data.Time
-import Fsm.Commons
+-- import Fsm.Commons
 import Fsm.UpdateStates as US
-import Fsm.Constants
+import Fsm.Constants.Types
+import Fsm.ConstantLoaders
+import Fsm.Commons.Types
+import Fsm.Commons
 import Fsm.Utils
+import Fsm.Stages.Types
 import Data.Semigroup
-
-data Stage = Egg { stateChgdTime :: UTCTime,
-                   currTemp :: Int ,
-                   energyToHatch :: Int,
-                   health :: Health } |
-             Chicken { bornTime :: UTCTime,
-                       petLength :: Length,
-                       weight :: Weight,
-                       fullness :: Fullness,
-                       pooAmt :: PooAmount,
-                       mood :: Mood,
-                       status :: Status,
-                       fatigue :: Fatigue,
-                       health :: Health} |
-             Adult { bornTime :: UTCTime,
-                     petLength :: Length,
-                     weight :: Weight,
-                     fullness :: Fullness,
-                     pooAmt :: PooAmount,
-                     mood :: Mood,
-                     status :: Status,
-                     fatigue :: Fatigue,
-                     health :: Health} |
-             Elder { bornTime :: UTCTime,
-                     petLength :: Length,
-                     weight :: Weight,
-                     fullness :: Fullness,
-                     pooAmt :: PooAmount,
-                     mood :: Mood,
-                     status :: Status,
-                     fatigue :: Fatigue,
-                     health :: Health,
-                     weakerSince :: UTCTime,
-                     medAllows :: Int} deriving (Eq, Show)
+import Data.Time
 
 instance Timeable Stage where
   age Egg{} = const 0
