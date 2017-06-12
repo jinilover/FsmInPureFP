@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Fsm.ConstantLoaders where
+module Fsm.ConstantLoaders
+  ( loadAllConsts )
+  where
 
 import Data.Configurator
 import Data.Configurator.Types

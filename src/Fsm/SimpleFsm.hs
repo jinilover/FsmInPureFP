@@ -1,5 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
-module Fsm.SimpleFsm where
+module Fsm.SimpleFsm
+  ( transit )
+  where
 
 import Fsm.Stages.Types
 import Fsm.Stages.Egg

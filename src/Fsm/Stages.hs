@@ -1,6 +1,25 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Fsm.Stages where
+module Fsm.Stages
+  ( inputsByState
+  , present
+  , grow
+  , getConstants
+  , autoUpdate
+  , wakeup
+  , poop
+  , Fsm.Stages.sleep
+  , Fsm.Stages.sleepIfTired
+  , feed
+  , medicate
+  , playEffect
+  , sing
+  , StageUpdate
+  , chickenAutoUpdates
+  , constipateEffect
+  , depressEffect
+  , fatigueEffect )
+  where
 
 -- import Fsm.Commons
 import Fsm.UpdateStates as US

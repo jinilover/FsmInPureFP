@@ -1,4 +1,9 @@
-module Fsm.Stages.Egg where
+module Fsm.Stages.Egg
+  ( energySpent
+  , updateEggHealth
+  , lengthByHealth
+  , weightByHealth )
+where
 
 import Fsm.Utils
 import Fsm.Commons
