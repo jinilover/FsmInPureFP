@@ -47,6 +47,10 @@ test-suite FsmInPureFP-tests
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Test.hs
+  other-modules:       Fsm.InputSpec
+                     , Fsm.SimpleFsmSpec
+                     , Fsm.StageUpdatesSpec
+                     , Fsm.TestUtils
   build-depends:       base >= 4.7 && < 5,
                        FsmInPureFP,
                        time,
