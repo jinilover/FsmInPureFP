@@ -41,7 +41,7 @@ process (Egg chgdTime temp _ Sick) _ (ct, _) allConsts
     return $
       "The egg is in poor health and suffered the " <> extreme <> " temperature for at least "
       <> show _fatalTempSecs <> " secs, failed to hatch"
-    where [_fatalTempSecs, _fatalMaxTemp] = [fatalTempSecs, fatalMaxTemp] <*> [eggConsts allConsts]
+    where [_fatalTempSecs, _fatalMaxTemp] = ($ eggConsts allConsts) <$> [fatalTempSecs, fatalMaxTemp]
           extreme = if temp == _fatalMaxTemp then "max" else "min"
 -- hatch
 process egg@(Egg chgdTime temp energyToHatch h) prompt (ct, _) allConsts

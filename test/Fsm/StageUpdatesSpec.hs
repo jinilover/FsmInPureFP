@@ -491,16 +491,16 @@ elderUpdateSpec allConsts =
       -- in test1, health upgraded to Healthy due to digest from full,
       -- in test2, wait to reach weakerInSecs, this time healthy downgraded to Fair
       (\t -> health $ autoUpdate elder t _elderConsts) <$> [t2, t3] `shouldBe` [Healthy, Fair]
-  where [_adultConsts, _elderConsts] = [adultConsts, elderConsts] <*> [allConsts]
-        [_digestSecs, _weakerInSecs] = [digestSecs, weakerInSecs] <*> [_elderConsts]
+  where [_adultConsts, _elderConsts] = ($ allConsts) <$> [adultConsts, elderConsts]
+        [_digestSecs, _weakerInSecs] = ($ _elderConsts) <$> [digestSecs, weakerInSecs]
 
 intConsts :: StageConstants -> [Int]
 intConsts petConsts =
-  [duration, maxAwakeSecs, pooLimit, pooFromFull, pooFromSoSo, digestSecs, depressIndex, fatigueLimit] <*> [petConsts]
+  ($ petConsts) <$> [duration, maxAwakeSecs, pooLimit, pooFromFull, pooFromSoSo, digestSecs, depressIndex, fatigueLimit]
 
 doubleConsts :: StageConstants -> [Double]
 doubleConsts petConsts =
-  [lengthFromFull, lengthFromPlay, weightFromFull, weightLoss] <*> [petConsts]
+  ($ petConsts) <$> [lengthFromFull, lengthFromPlay, weightFromFull, weightLoss]
 
 spec :: AllConstants -> Expectation
 spec allConsts =

@@ -24,8 +24,8 @@ type CommonPetStruct a = UTCTime ->
 basePet :: UTCTime -> AllConstants -> CommonPetStruct a -> a
 basePet ct allConsts f =
   f ct (Length l) (Weight w) (SoSo ct) (PooAmount ct 0) (Mood ct 0) (Awake ct) (Fatigue ct 0) Fair
-  where [l, w] = [baseLength, baseWeight] <*> [eggConsts allConsts]
+  where [l, w] = ($ eggConsts allConsts) <$> [baseLength, baseWeight]
 
 baseEgg :: UTCTime -> AllConstants -> Stage
 baseEgg ct allConsts = Egg ct temp (temp * _duration) Healthy
-  where [temp, _duration] = [medTemp, duration] <*> [eggConsts allConsts]
+  where [temp, _duration] = ($ eggConsts allConsts) <$> [medTemp, duration]

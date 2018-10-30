@@ -25,7 +25,7 @@ main =
     finalMsg <- transit egg (prompt _timeout) eggInputs "An egg is born!" allConsts
     putStrLn finalMsg
     where readConsts allConsts =
-            let [timeout, temp, _duration] = [inputTimeout . inputConsts, medTemp . eggConsts, duration . eggConsts] <*> [allConsts] in
+            let [timeout, temp, _duration] = ($ allConsts) <$> [inputTimeout . inputConsts, medTemp . eggConsts, duration . eggConsts] in
               return [timeout, temp, temp * _duration]
 
 -- prompt the user input by providing the available inputs

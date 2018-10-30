@@ -36,7 +36,7 @@ killByTimeSpec allConsts =
         (`shouldBe` "The egg is in poor health and suffered the min temperature for at least " <>
           show timeout <> " secs, failed to hatch")
     where createEgg = (\ct -> (baseEgg ct allConsts) {health = Sick}) <$> getCurrentTime
-          [timeout, maxTemp, minTemp] = [fatalTempSecs, fatalMaxTemp, fatalMinTemp] <*> [eggConsts allConsts]
+          [timeout, maxTemp, minTemp] = ($ eggConsts allConsts) <$> [fatalTempSecs, fatalMaxTemp, fatalMinTemp]
           prompt _ _ = do
                          (sleepInSecs . (1 +)) timeout
                          (,) <$> getCurrentTime <*> return Nothing

@@ -58,7 +58,7 @@ digest egg@Egg{} _ _ _ = egg -- won't happen, just for completeness
 digest pet consts wtGain ct =
   let _fullness = fullness pet
       updateFuncs pFun wtFun lFun =
-          let [deltaPooFull, deltaPooSoSo, limit] = [pooFromFull, pooFromSoSo, pooLimit] <*> [consts]
+          let [deltaPooFull, deltaPooSoSo, limit] = ($ consts) <$> [pooFromFull, pooFromSoSo, pooLimit]
               wtLoss = (Weight . weightLoss) consts
               deltaLenFull = (Length . lengthFromFull) consts
               pLimit = Limit limit in
@@ -89,7 +89,7 @@ inputsByState pet =
                                   Adult{} -> (adultInputs, [])
                                   Elder _ _ _ _ _ _ _ _ _ _ 0 -> (elderInputs, [filter $ \inp -> inp /= Medication])
                                   _ -> (elderInputs, []) in
-  updateListByFuncs inps $ ([inputsByStatus . status, inputsByFullness . fullness, inputsByHealth . health] <*> [pet]) ++ funcs
+  updateListByFuncs inps $ (($ pet) <$> [inputsByStatus . status, inputsByFullness . fullness, inputsByHealth . health]) ++ funcs
 
 -- type alias for the type of functions that update the stage to another stage
 -- according to the given currentTime and configured values from appl.cfg
@@ -180,7 +180,7 @@ weakerWithTime pet _ _ = pet
 raiseFatigue :: StageUpdate
 raiseFatigue egg@Egg{} _ _ = egg
 raiseFatigue pet ct petConsts =
-  let [limit, _maxAwakeSecs, timeout] = [fatigueLimit, maxAwakeSecs, raiseFatigueSecs] <*> [petConsts]
+  let [limit, _maxAwakeSecs, timeout] = ($ petConsts) <$> [fatigueLimit, maxAwakeSecs, raiseFatigueSecs]
       newFatigue = _raiseFatigue (status pet) (fatigue pet) (Limit limit) _maxAwakeSecs (Timeout timeout) ct in
   pet { fatigue = newFatigue }
 
@@ -188,7 +188,7 @@ raiseFatigue pet ct petConsts =
 decreaseMood :: StageUpdate
 decreaseMood egg@Egg{} _ _ = egg
 decreaseMood pet ct petConsts =
-  let [depIndex, timeout] = [depressIndex, decreaseMoodSecs] <*> [petConsts]
+  let [depIndex, timeout] = ($ petConsts) <$> [depressIndex, decreaseMoodSecs]
       newMood = _decreaseMood (mood pet) (Limit depIndex) (Timeout timeout) ct in
   pet { mood = newMood }
 
@@ -235,7 +235,7 @@ present pet allConsts ct =
           mandatoryMsgs =
             let consts = getConstants pet allConsts
                 [_depressIndex, _happyIndex, _depressSecs, _maxAwakeSecs, _fatigueLimit, _fatigueSecs, _digestSecs, _pooLimit, _pooLimitSecs] =
-                  [depressIndex, happyIndex, depressSecs, maxAwakeSecs, fatigueLimit, fatigueSecs, digestSecs, pooLimit, pooLimitSecs] <*> [consts] in
+                  ($ consts) <$> [depressIndex, happyIndex, depressSecs, maxAwakeSecs, fatigueLimit, fatigueSecs, digestSecs, pooLimit, pooLimitSecs] in
             [const . presentLength . petLength,
              const . presentWeight . weight,
              \p -> const $ presentBmi (weight p) (petLength p),

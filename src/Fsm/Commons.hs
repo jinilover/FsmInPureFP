@@ -187,7 +187,7 @@ decreaseFullness SoSo{} = Hungry
 decreaseFullness hungry = const hungry
 
 isFatalTemp :: Int -> AllConstants -> Bool
-isFatalTemp temp allConsts = elem temp $ [fatalMinTemp, fatalMaxTemp] <*> [eggConsts allConsts]
+isFatalTemp temp allConsts = elem temp $ ($ eggConsts allConsts) <$> [fatalMinTemp, fatalMaxTemp]
 
 isSleeping :: Status -> Bool
 isSleeping Sleeping{} = True
